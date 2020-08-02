@@ -1,0 +1,1 @@
+export const API_URL = "http://micasvn.ddns.net:9999"
