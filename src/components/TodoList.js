@@ -1,49 +1,48 @@
 import React, { useState, useEffect } from 'react'
 import axios from 'axios'
-import TodoItems from './TodoList'
+import TodoItems from './TodoItems'
 import {API_URL}  from '../constants/config'
 import {
   DownOutlined,
   DeleteFilled,
   CheckOutlined,
-  CheckCircleTwoTone
-} from '@ant-design/icons'
-import { Input } from 'antd'
+  CheckCircleOutlined
+} from '@ant-design/icons';
+import { Input, Button } from 'antd';
 
 const TodoList = () => {
-  const [list, setList] = useState([]);
-  const [isComplete, setIsComplete] = useState(false);
-  const [itemRemaining, setItemRemaining] = useState(0);
+  const [list, setList] = useState([])
+  const [itemRemaining, setItemRemaining] = useState(0)
 
-  const [isCompleted, setIsCompleted] = useState(false);
-  const [isFilter, setIsFilter] = useState(false);
+  const [isCompleted, setIsCompleted] = useState(false)
+  const [isFilter, setIsFilter] = useState(false)
 
-  const SINGLE_VALUE = 1;
-  const PLURAL_TEXT = 'items left';
-  const SINGLE_TEXT = 'item left';
+  const SINGLE_VALUE = 1
+  const PLURAL_TEXT = 'items left'
+  const SINGLE_TEXT = 'item left'
 
   useEffect(
     () => {
       async function getData() {
-        const response = await axios.get(`${API_URL}/todos`);
-        // if(response.data == null){
-        //   setList(list)
-        // }
+        const response = await axios.get(`${API_URL}/todos`)
         setList(response.data)
+        if(response.data == null){
+          setList(list)
+        }
       }
-      getData();
-    }, []);
+      getData()
+    }, [list])
 
   useEffect(
     () => {
-      setItemRemaining(list.filter((list) => !list.isComplete).length);
+      setItemRemaining(list.filter((list) => !list.isComplete).length)
     },
     [list]
   );
 
   const addItem = (title) => {
-    setList([...list, { content: title, isComplete: false, _id: Date.now() }]);
-    axios.post(`${API_URL}/todos`, { content: title });
+    setList([...list, { content: title, isComplete: false, _id: Date.now() }])
+    axios.post(`${API_URL}/todos`, { content: title })
   };
 
   const checkAll = async () => {
@@ -60,7 +59,6 @@ const TodoList = () => {
       item.isComplete = newSelectedState;
       return item;
     });
-    setIsComplete(!isComplete);
     setList(todoItems);
 
     const response = await axios.put(`${API_URL}/todos`);
@@ -77,9 +75,10 @@ const TodoList = () => {
   const onChange = (index, _id) => {
     let lists = list;
     lists[index].isComplete = !list[index].isComplete;
-    setList([...list]);
-    var url =`${API_URL}/todos/${_id}`;
+   
+    var url =`${API_URL}/todos/select/${_id}`;
     axios.patch(url);
+    setList([...list]);
   };
 
   const clear = (_id) => {
@@ -112,7 +111,7 @@ const TodoList = () => {
     setIsCompleted(status);
   };
 
-  const showList = () => {
+  const displayList = () => {
     let lists = list;
     if (isFilter) {
       lists = list.filter((item) => item.isComplete === isCompleted);
@@ -125,9 +124,9 @@ const TodoList = () => {
         key={item._id}
       >
         {item.isComplete ? (
-          <CheckOutlined onClick={() => onChange(index, item._id)} alt="not yet"/>
+          <CheckCircleOutlined style={{color: "brown"}} onClick={() => onChange(index, item._id)} alt="done"/>
         ) : (
-          <CheckCircleTwoTone onClick={() => onChange(index, item._id)} alt="done"/>
+          <CheckOutlined onClick={() => onChange(index, item._id)} alt="not yet"/>
         )}
         <Input
           onChange={(e) => editItem(item._id, e.target.value)}
@@ -150,22 +149,24 @@ const TodoList = () => {
       <TodoItems addItem={addItem} />
       
       <ul className="theList">
-        {showList()}
+        {displayList()}
         {
         list.length &&
           <footer>
             <DownOutlined 
-              className={ isComplete ? 'moreOpacity' : 'lessOpacity'}
+              className={ itemRemaining === 0 ? 'moreOpacity' : 'lessOpacity' }
               onClick={() => checkAll()}
               alt="all"
             />
             <span>
               {itemRemaining} {itemRemaining !== SINGLE_VALUE ? PLURAL_TEXT : SINGLE_TEXT}
             </span>
-            <button onClick={handleSetFilter}>All</button>
-            <button onClick={handleSetListStatus(false)}>Active</button>
-            <button onClick={handleSetListStatus(true)}>Completed</button>
-            <button onClick={clear}>Clear Completed</button>
+            <Button onClick={handleSetFilter}>All</Button>
+            <Button onClick={handleSetListStatus(false)}>Active</Button>
+            <Button onClick={handleSetListStatus(true)}>Completed</Button>
+            { itemRemaining < list.length &&
+              <Button onClick={clear}>Clear Completed</Button> 
+            }
           </footer>
         }
       </ul>

@@ -2,43 +2,8 @@
   text-align: center;
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
-}
-
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
-}
-
-.App-link {
-  color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
-}
-
 h1 {
-  font-weight: 500;
+  font-weight: 400;
   color: rgba(129, 49, 49, 0.486);
   font-size: 4rem;
   margin: 0;
@@ -48,51 +13,57 @@ h1 {
   margin-top: 0.8rem;
 }
 
+form {
+  max-width: 35%;
+  margin: 0 auto;
+}
+
 .type {
-  min-width: 33%;
   height: 2.8rem;
+  width: 100%;
   font-size: 1.6rem;
   padding-left: 10px;
-  box-shadow: 0 5px 10px rgb(187, 187, 187);
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.26);
   outline: none;
   color: rgb(105, 120, 134);
   font-weight: lighter;
+  box-sizing: border-box;
 }
 
 button {
   width: auto;
   height: 1.5rem;
   outline: none;
-  font-size: 1.1rem;
+  font-size: 1rem;
   border: 1px solid white;
   cursor: pointer;
   background-color: white;
   box-sizing: border-box;
+  color: #777;
 }
 
 button:hover {
-  border: 1px solid darkred;
+  border: 1px solid rgba(144, 33, 33, 0.582);
 }
 button:active, button:focus {
-  border: 1px solid rgba(146, 19, 19, 0.692);
+  border: 1px solid rgba(144, 33, 33, 0.582);
 }
 
 .theList {
-  margin-top: 2rem;
-  max-width: 40%;
-  position: relative;
+  max-width: 35%;
   list-style: none;
   text-align: left;
+  border: 1px solid rgba(0, 0, 0, 0.26);
+  box-sizing: border-box;
+  margin-top: -1px;
 }
 
 li {
-  padding: 0.5rem 0.5rem 0.5rem 0.2rem;
-  border: 1px solid rgba(119, 136, 153, 0.753);
+  padding: 0.5rem 0 0.5rem 1rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.116);
   margin-top: -1px;
   box-sizing: border-box;
   display: flex;
-  justify-content: space-between;
   align-items: center;
 }
 
@@ -106,34 +77,48 @@ ul {
 }
 
 .option:hover{
-  opacity: .8;
+  opacity: .9;
+  color: rgba(121, 39, 39, 0.89);
 }
 
 .edit {
   border: none;
   padding: 0;
-  flex: 1;
   font-size: 1.5rem;
   font-weight: 300;
   line-height: 1.6rem;
   outline: none;
+  width: 87%;
 }
 
 footer {
   display: flex;
-  margin-top: 0.3rem;
-  font-size: 1.1rem;
+  font-size: 1rem;
   align-items: center;
+  color: #777;
+  height: 2rem;
+  padding-left: 1rem;
+}
+
+.moreOpacity {
+  opacity: 1;
+  color: black;
+}
+
+.lessOpacity {
+  opacity: 0.3;
 }
 
 span {
   flex: 1;
 }
 
-.moreOpacity {
-  opacity: 0.8;
+.anticon {
+  display: inline-flex;
+  outline: none;
 }
 
-.lessOpacity {
-  opacity: 0.3;
+.anticon-down {
+  flex: inherit;
+  margin-right: 1rem;
 }

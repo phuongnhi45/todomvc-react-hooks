@@ -2,7 +2,7 @@ import React from 'react'
 import './App.css'
 import TodoList from "./components/TodoList"
 
-function App() {
+export default function App() {
   return (
     <div className="App">
       <h1>todos</h1>
@@ -10,5 +10,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
