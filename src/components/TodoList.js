@@ -1,48 +1,44 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
-import TodoItems from './TodoItems'
-import {API_URL}  from '../constants/config'
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import TodoItems from "./TodoItems";
+import { API_URL } from "../constants/config";
 import {
   DownOutlined,
   DeleteFilled,
   CheckOutlined,
-  CheckCircleOutlined
-} from '@ant-design/icons';
-import { Input, Button } from 'antd';
+  CheckCircleOutlined,
+} from "@ant-design/icons";
+import { Input, Button } from "antd";
 
 const TodoList = () => {
-  const [list, setList] = useState([])
-  const [itemRemaining, setItemRemaining] = useState(0)
+  const [list, setList] = useState([]);
+  const [itemRemaining, setItemRemaining] = useState(0);
 
-  const [isCompleted, setIsCompleted] = useState(false)
-  const [isFilter, setIsFilter] = useState(false)
+  const [isCompleted, setIsCompleted] = useState(false);
+  const [isFilter, setIsFilter] = useState(false);
 
-  const SINGLE_VALUE = 1
-  const PLURAL_TEXT = 'items left'
-  const SINGLE_TEXT = 'item left'
+  const SINGLE_VALUE = 1;
+  const PLURAL_TEXT = "items left";
+  const SINGLE_TEXT = "item left";
 
-  useEffect(
-    () => {
-      async function getData() {
-        const response = await axios.get(`${API_URL}/todos`)
-        setList(response.data)
-        if(response.data == null){
-          setList(list)
-        }
+  useEffect(() => {
+    async function getData() {
+      const response = await axios.get(`${API_URL}/todos`);
+      setList(response.data);
+      if (response.data == null) {
+        setList(list);
       }
-      getData()
-    }, [list])
+    }
+    getData();
+  }, [list]);
 
-  useEffect(
-    () => {
-      setItemRemaining(list.filter((list) => !list.isComplete).length)
-    },
-    [list]
-  );
+  useEffect(() => {
+    setItemRemaining(list.filter((list) => !list.isComplete).length);
+  }, [list]);
 
   const addItem = (title) => {
-    setList([...list, { content: title, isComplete: false, _id: Date.now() }])
-    axios.post(`${API_URL}/todos`, { content: title })
+    axios.post(`${API_URL}/todos`, { content: title });
+    setList([...list, { content: title, isComplete: false, _id: Date.now() }]);
   };
 
   const checkAll = async () => {
@@ -59,30 +55,31 @@ const TodoList = () => {
       item.isComplete = newSelectedState;
       return item;
     });
-    setList(todoItems);
 
     const response = await axios.put(`${API_URL}/todos`);
-    if (response.status !==200) { 
-       return response
+    if (response.status !== 200 || response.success) {
+      alert("error");
+    } else {
+      setList(todoItems);
     }
   };
 
   const deleteId = (_id) => {
+    axios.delete(`${API_URL}/todos/${_id}`);
     setList(list.filter((item) => item._id !== _id));
-    axios.delete(`${API_URL}/todos/${_id}`)
   };
 
   const onChange = (index, _id) => {
     let lists = list;
     lists[index].isComplete = !list[index].isComplete;
-   
-    var url =`${API_URL}/todos/select/${_id}`;
+
+    var url = `${API_URL}/todos/select/${_id}`;
     axios.patch(url);
     setList([...list]);
   };
 
   const clear = (_id) => {
-    var url =`${API_URL}/todos`;
+    var url = `${API_URL}/todos`;
     axios.delete(url);
     setList(list.filter((item) => item.isComplete === false));
   };
@@ -98,8 +95,8 @@ const TodoList = () => {
       ...item,
       content: value,
     };
-    setList(todoItems);
     axios.patch(`${API_URL}/todos/${_id}`, { content: value });
+    setList(todoItems);
   };
 
   const handleSetFilter = () => {
@@ -124,16 +121,23 @@ const TodoList = () => {
         key={item._id}
       >
         {item.isComplete ? (
-          <CheckCircleOutlined style={{color: "brown"}} onClick={() => onChange(index, item._id)} alt="done"/>
+          <CheckCircleOutlined
+            style={{ color: "brown" }}
+            onClick={() => onChange(index, item._id)}
+            alt="done"
+          />
         ) : (
-          <CheckOutlined onClick={() => onChange(index, item._id)} alt="not yet"/>
+          <CheckOutlined
+            onClick={() => onChange(index, item._id)}
+            alt="not yet"
+          />
         )}
         <Input
           onChange={(e) => editItem(item._id, e.target.value)}
           value={item.content}
           className="edit"
         />
-        <DeleteFilled 
+        <DeleteFilled
           index={item._id}
           onClick={() => deleteId(item._id)}
           className="option"
@@ -147,28 +151,28 @@ const TodoList = () => {
   return (
     <div className="List">
       <TodoItems addItem={addItem} />
-      
+
       <ul className="theList">
         {displayList()}
-        {
-        list.length &&
+        {list.length && (
           <footer>
-            <DownOutlined 
-              className={ itemRemaining === 0 ? 'moreOpacity' : 'lessOpacity' }
+            <DownOutlined
+              className={itemRemaining === 0 ? "moreOpacity" : "lessOpacity"}
               onClick={() => checkAll()}
               alt="all"
             />
             <span>
-              {itemRemaining} {itemRemaining !== SINGLE_VALUE ? PLURAL_TEXT : SINGLE_TEXT}
+              {itemRemaining}{" "}
+              {itemRemaining !== SINGLE_VALUE ? PLURAL_TEXT : SINGLE_TEXT}
             </span>
             <Button onClick={handleSetFilter}>All</Button>
             <Button onClick={handleSetListStatus(false)}>Active</Button>
             <Button onClick={handleSetListStatus(true)}>Completed</Button>
-            { itemRemaining < list.length &&
-              <Button onClick={clear}>Clear Completed</Button> 
-            }
+            {itemRemaining < list.length && (
+              <Button onClick={clear}>Clear Completed</Button>
+            )}
           </footer>
-        }
+        )}
       </ul>
     </div>
   );
