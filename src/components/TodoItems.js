@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { Input } from 'antd';
-import PropTypes from 'prop-types';
+import React, { useState } from 'react'
+import { Input } from 'antd'
+import PropTypes from 'prop-types'
 
 const TodoItems = ({addItem}) => {
   const [title, setTitle] = useState('');

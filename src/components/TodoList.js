@@ -1,7 +1,9 @@
-import React, { useState, useEffect } from "react";
-import axios from "axios";
-import TodoItems from "./TodoItems";
-import { API_URL } from "../constants/config";
+import React, { useState, useEffect } from 'react'
+import axios from 'axios'
+import TodoItems from './TodoItems'
+// import TodoHandle from './TodoHandle'
+import { API_URL } from '../constants/config'
+import { apiCompletedAll } from '../service/request-api'
 import {
   DownOutlined,
   DeleteFilled,
@@ -56,7 +58,7 @@ const TodoList = () => {
       return item;
     });
 
-    const response = await axios.put(`${API_URL}/todos`);
+    const response = await apiCompletedAll();
     if (response.status !== 200 || response.success) {
       alert("error");
     } else {
@@ -172,6 +174,7 @@ const TodoList = () => {
               <Button onClick={clear}>Clear Completed</Button>
             )}
           </footer>
+          // <TodoHandle checkAll={checkAll}/>
         )}
       </ul>
     </div>

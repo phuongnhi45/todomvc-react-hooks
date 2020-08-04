@@ -1,10 +1,10 @@
-import config from '../constants/config'
+import * as config from '../constants/config'
 import axios from 'axios'
 
-export default function callApi(enpoint, method="get", body){
+export default function callApi(endpoint, method, body){
   return axios({
     method,
-    url:`${config.API_URL}/${enpoint}`,
+    url:`${config.API_URL}/${endpoint}`,
     data: body
   })
     .catch(err =>{
